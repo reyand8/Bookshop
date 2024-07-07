@@ -6,10 +6,15 @@ from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
 from django.contrib.auth import login, logout, authenticate
+from django.contrib import messages
 
-from .forms import RegistrationForm, LoginForm
+from .models import Customer
+from .forms import RegistrationForm, LoginForm, UserEditForm
 from .tokens import account_activation_token
 
+
+
+# User
 
 def user_registration(request):
     if request.user.is_authenticated:
@@ -36,8 +41,23 @@ def user_registration(request):
         else:
             registration_form = RegistrationForm()
         return render(request,
-                      'account/user_auth/registration.html',
+                      'account/user/user_registration.html',
                       {'reg_form': reg_form})
+
+
+def user_activation(request, uidb64, token):
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = Customer.objects.get(pk=uid)
+    except(TypeError, ValueError, OverflowError, user.DoesNotExist):
+        user = None
+    if user is not None and account_activation_token.check_token(user, token):
+        user.is_active = True
+        user.save()
+        login(request, user)
+        return redirect('account:dashboard')
+    else:
+        return render(request, 'account/account_activation/account_activation_invalid.html')
 
 
 def user_login(request):
@@ -51,4 +71,27 @@ def user_login(request):
         return redirect('/')
     else:
         log_form = LoginForm()
-    return render(request, 'account/user_auth/login.html', {'log_form': log_form})
+    return render(request, 'account/user/user_login.html',
+                  {'log_form': log_form})
+
+
+@login_required
+def user_edit(request):
+    if request.method == 'POST':
+        user_form = UserEditForm(instace=request.user, data=request.POST)
+        if user_form.is_valid():
+            user_form.save()
+    else:
+        user_form = UserEditForm(instance=request.user)
+    return render(request, 'account/user/user_edit.html', {'user_form': user_form})
+
+
+@login_required
+def user_delete(request):
+    user = Customer.objects.get(username=request.user)
+    user.is_active = False
+    user.save()
+    logout(request)
+    return redirect('account:delete_confirmation')
+
+
