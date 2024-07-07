@@ -95,3 +95,35 @@ def user_delete(request):
     return redirect('account:delete_confirmation')
 
 
+# Orders, wishlist and dashboard
+
+def dashboard(request):
+    orders = user_orders(request)
+    return render(request, 'account/user_orders/dashboard.html',
+                  {'section': 'profile', 'orders': orders})
+
+
+@login_required
+def get_wishlist(request):
+    products = Product.objects.filter(user_wishlist=request.user)
+    return render(request, 'account/user_orders/wishlist.html', {'wishlist': products})
+
+
+@login_required
+def get_user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return render(request, 'account/account_orders/account_user_orders.html', {'orders': orders})
+
+
+@login_required
+def add_to_wishlist(request, id):
+    product = get_object_or_404(Product, id=id)
+    if product.user_wishlist.filter(id=request.user.id).exists():
+        product.user_wishlist.remove(request.user)
+        messages.success(request, product.title + ' has been removed from your wishlist')
+    else:
+        product.user_wishlist.add(request.user)
+        messages.success(request, product.title + ' was added to your wishlist')
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
+
