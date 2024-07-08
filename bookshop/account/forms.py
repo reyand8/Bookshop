@@ -1,9 +1,8 @@
 from django import forms
-
-from .models import Customer, Address
 from django.contrib.auth.forms import (AuthenticationForm, UserCreationForm, PasswordResetForm,
                                        SetPasswordForm)
 
+from .models import Customer, Address
 
 
 class LoginForm(AuthenticationForm):
