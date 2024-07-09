@@ -8,19 +8,30 @@ from .models import Customer, Address
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={
         'placeholder': 'Email address',
+        'class': 'form-control auth__form-input',
     }))
     password = forms.CharField(widget=forms.PasswordInput(attrs={
         'placeholder': 'Password',
+        'class': 'form-control auth__form-input',
     }))
 
 class RegistrationForm(UserCreationForm):
     username = forms.CharField(
-        widget=forms.TextInput(attrs={'placeholder': 'Username'}),
+        widget=forms.TextInput(attrs={'placeholder': 'Username',
+                                      'class': 'form-control'
+                                      }),
                                min_length=6, max_length=20, help_text='Required')
-    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email'}),
+    email = forms.EmailField(widget=forms.TextInput(attrs={'placeholder': 'Email',
+                                                           'class': 'form-control'}),
                              help_text='Required')
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Password'}))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder': 'Repeat Password'}))
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Password',
+        'class': 'form-control auth__form-input',
+    }), help_text='Required')
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={
+        'placeholder': 'Repeat Password',
+        'class': 'form-control auth__form-input',
+    }), help_text='Required')
 
     class Meta:
         model = Customer
