@@ -1,0 +1,30 @@
+{% block user_registration_form %}
+     <form method="post" class="php-email-form">
+                  {% csrf_token %}
+                  <h3>Sign Up</h3>
+                  <div class="row gy-3">
+                    <div class="col-12">
+                     {{ form.username }}
+                    </div>
+                    <div class="col-12 ">
+                        {{ form.email }}
+                    </div>
+                    <div class="col-12">
+                        {{ form.password1 }}
+                    </div>
+                    <div class="col-12">
+                        {{ form.password2 }}
+                    </div>
+                    <div class="col-12 text-center">
+                        <div class="error-message">{{ form.errors }}</div>
+                        <div class="mb-3 mt-3">
+                            <div class="text-center">
+                                <a href="{% url 'account:login' %}">
+                                I already have an account</a>
+                            </div>
+                        </div>
+                      <button type="submit">Sign Up</button>
+                    </div>
+                  </div>
+     </form>
+{% endblock %}
