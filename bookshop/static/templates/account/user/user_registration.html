@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
-
+{% load static %}
+{% block title %}Sign Up{% endblock %}
 
 {% block  user_registration %}
   <main class="main">
@@ -22,4 +23,7 @@
         </div>
       </section>
   </main>
+{% endblock %}
+{% block extra_js %}
+        <script src="{% static 'assets/vendor/php-email-form/validate.js' %}"></script>
 {% endblock %}

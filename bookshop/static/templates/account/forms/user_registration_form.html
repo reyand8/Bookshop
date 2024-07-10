@@ -1,22 +1,25 @@
 {% block user_registration_form %}
-     <form method="post" class="php-email-form">
+     <form method="post" id="registration-form" class="php-email-form">
                   {% csrf_token %}
                   <h3>Sign Up</h3>
                   <div class="row gy-3">
                     <div class="col-12">
-                     {{ form.username }}
+                        {{ form.username }}
+                        {{ form.username.errors }}
                     </div>
                     <div class="col-12 ">
                         {{ form.email }}
+                        {{ form.email.errors }}
                     </div>
                     <div class="col-12">
                         {{ form.password1 }}
+                        {{ form.password1.errors }}
                     </div>
                     <div class="col-12">
                         {{ form.password2 }}
+                        {{ form.password2.errors }}
                     </div>
                     <div class="col-12 text-center">
-                        <div class="error-message">{{ form.errors }}</div>
                         <div class="mb-3 mt-3">
                             <div class="text-center">
                                 <a href="{% url 'account:login' %}">
