@@ -8,14 +8,16 @@ from django.template.loader import render_to_string
 from django.contrib.auth import login, logout, authenticate
 from django.contrib import messages
 
-from .models import Customer
-from .forms import RegistrationForm, LoginForm, UserEditForm
+from .models import Customer, Address
+from .forms import RegistrationForm, LoginForm, UserEditForm, UserAddressForm
 from .tokens import account_activation_token
+from orders.models import Order
+from orders.views import all_orders
+from shop.models import Product
 
 
 
 # User
-
 def user_registration(request):
     if request.user.is_authenticated:
         return redirect('account:dashboard')
@@ -30,7 +32,7 @@ def user_registration(request):
             current_site = get_current_site(request)
             subject = 'Please, activate your account'
             message = render_to_string(
-                'account/account_activation/account_activation.html',
+                'account/account_actions/account_activation.html',
                 {'user': user,
                  'domain': current_site.domain,
                  'uid': urlsafe_base64_encode(force_bytes(user.pk)),
@@ -39,10 +41,14 @@ def user_registration(request):
             user.email_user(subject=subject, message=message)
             return HttpResponse('You were registered successfully')
         else:
-            registration_form = RegistrationForm()
-        return render(request,
-                      'account/user/user_registration.html',
-                      {'reg_form': reg_form})
+            return render(request,
+                          'account/user/user_registration.html',
+                          {'form': reg_form})
+    else:
+        reg_form = RegistrationForm()
+    return render(request,
+                  'account/user/user_registration.html',
+                  {'form': reg_form})
 
 
 def user_activation(request, uidb64, token):
@@ -57,22 +63,7 @@ def user_activation(request, uidb64, token):
         login(request, user)
         return redirect('account:dashboard')
     else:
-        return render(request, 'account/account_activation/account_activation_invalid.html')
-
-
-def user_login(request):
-    if request.method == "POST":
-        username = request.POST['username']
-        password = request.POST['password']
-        user = authenticate(request, username=username, password=password)
-        if user is None:
-            return HttpResponse("Username or password is incorrect")
-        login(request, user)
-        return redirect('/')
-    else:
-        log_form = LoginForm()
-    return render(request, 'account/user/user_login.html',
-                  {'log_form': log_form})
+        return render(request, 'account/account_actions/account_activation_invalid.html')
 
 
 @login_required
@@ -96,9 +87,8 @@ def user_delete(request):
 
 
 # Orders, wishlist and dashboard
-
 def dashboard(request):
-    orders = user_orders(request)
+    orders = all_orders(request)
     return render(request, 'account/user_orders/dashboard.html',
                   {'section': 'profile', 'orders': orders})
 
@@ -113,7 +103,7 @@ def get_wishlist(request):
 def get_user_orders(request):
     user_id = request.user.id
     orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
-    return render(request, 'account/account_orders/account_user_orders.html', {'orders': orders})
+    return render(request, 'account/user_orders/user_orders.html', {'orders': orders})
 
 
 @login_required
@@ -127,3 +117,63 @@ def add_to_wishlist(request, id):
         messages.success(request, product.title + ' was added to your wishlist')
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
 
+
+# Addresses
+
+@login_required
+def view_address(request):
+    addresses = Address.objects.filter(customer=request.user)
+    return render(request, 'account/user/user_addresses.html', {'addresses': addresses})
+
+
+@login_required
+def add_address(request):
+    if request.method == 'POST':
+        address_form = UserAddressForm(data=request.POST)
+        if address_form.is_valid():
+            address_form = address_form.save(commit=False)
+            address_form.customer = request.user
+            address_form.save()
+            return HttpResponseRedirect(reverse('account:addresses'))
+    else:
+        address_form = UserAddressForm()
+    return render(request, 'account/user/user_edit_addresses.html',
+                  {'form': address_form})
+
+
+@login_required
+def edit_address(request, id):
+    if request.method == 'POST':
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address, data=request.POST)
+        if address_form.is_valid():
+            address_form.save()
+            return HttpResponseRedirect(reverse('account:addresses'))
+    else:
+        address = Address.objects.get(pk=id, customer=request.user)
+        address_form = UserAddressForm(instance=address)
+    return render(request, 'account/user/user_edit_addresses.html',
+                  {'form': address_form})
+
+
+@login_required
+def delete_address(request, id):
+    address = Address.objects.filter(pk=id, customer=request.user).delete()
+    return redirect('account:addresses')
+
+
+@login_required
+def set_default_address(request, id):
+    Address.objects.filter(customer=request.user, default=True).update(default=False)
+    Address.objects.filter(pk=id, customer=request.user).update(default=True)
+    previous_url = request.META.get('HTTP_REFERER')
+    if 'delivery_address' in previous_url:
+        return redirect('checkout:delivery_address')
+    return redirect('account:addresses')
+
+
+@login_required
+def get_user_orders(request):
+    user_id = request.user.id
+    orders = Order.objects.filter(user_id=user_id).filter(billing_status=True)
+    return render(request, 'account/user_orders/user_orders.html', {'orders': orders})
