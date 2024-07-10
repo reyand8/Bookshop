@@ -53,15 +53,15 @@ class Customer(AbstractBaseUser, PermissionsMixin):
 class Address(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     customer = models.ForeignKey(Customer, verbose_name='Customer', on_delete=models.CASCADE)
-    full_name = models.CharField(label='Full Name', max_length=50)
+    full_name = models.CharField(max_length=50)
     phone = models.CharField(max_length=20)
-    postcode = models.CharField(label='Postcode', max_length=20)
+    postcode = models.CharField(max_length=20)
     address_line_1 = models.CharField(max_length=90, blank=True)
     address_line_2 = models.CharField(max_length=90, blank=True)
     city = models.CharField(max_length=150, blank=True)
-    delivery_instructions = models.CharField(label='Delivery Instructions', max_length=200)
-    created_at = models.DateTimeField(label='Created at', auto_now_add=True)
-    updated_at = models.DateTimeField(label='Updated at', auto_now=True)
+    delivery_instructions = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     default = models.BooleanField(default=False)
 
     class Meta:
