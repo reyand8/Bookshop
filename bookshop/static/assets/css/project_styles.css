@@ -1,0 +1,52 @@
+.auth__form-input::placeholder {
+  color:#ced4da;
+}
+.auth__form-input {
+    font-size: 14px;
+    padding: 10px 15px;
+    box-shadow: none;
+    border-radius: 0;
+    color: var(--default-color);
+    background-color:
+    color-mix(in srgb, var(--background-color), transparent 20%);
+    border-color:
+    color-mix(in srgb, var(--default-color), transparent 80%);
+}
+
+.main_content {
+    margin: 140px auto;
+}
+
+
+.errorlist {
+  font-size: 14px;
+  color: #df1529;
+  text-align: left;
+  font-weight: 500;
+  list-style: none;
+}
+
+.main-btn{
+    color: var(--default-color);
+    font-family: var(--heading-font);
+    font-weight: 500;
+    font-size: 16px;
+    letter-spacing: 1px;
+    display: inline-block;
+    padding: 12px 40px;
+    border-radius: 50px;
+    transition: 0.5s;
+    margin: 10px;
+    border: 2px solid var(--accent-color);
+}
+
+.main-btn--submit {
+    color: var(--contrast-color);
+    background: var(--accent-color);
+    border: 0;
+    padding: 10px 30px;
+}
+
+.main-nav-bg {
+    background-image: url(../img/main-nav.jpg);
+}
