@@ -96,7 +96,7 @@ def dashboard(request):
 @login_required
 def get_wishlist(request):
     products = Product.objects.filter(user_wishlist=request.user)
-    return render(request, 'account/user_orders/wishlist.html', {'wishlist': products})
+    return render(request, 'account/user_orders/user_wishlist.html', {'wishlist': products})
 
 
 @login_required
