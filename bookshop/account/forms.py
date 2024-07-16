@@ -116,7 +116,7 @@ class UserEditForm(forms.ModelForm):
         min_length=6,
         max_length=20,
         widget=forms.TextInput(
-            attrs={'placeholder': 'Username', 'readonly': 'readonly'}))
+            attrs={'placeholder': 'Username'}))
 
     class Meta:
         model = Customer

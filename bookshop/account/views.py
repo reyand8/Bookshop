@@ -5,11 +5,11 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
 from django.utils.encoding import force_bytes, force_str
 from django.template.loader import render_to_string
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout
 from django.contrib import messages
 
 from .models import Customer, Address
-from .forms import RegistrationForm, LoginForm, UserEditForm, UserAddressForm
+from .forms import RegistrationForm, UserEditForm, UserAddressForm
 from .tokens import account_activation_token
 from orders.models import Order
 from orders.views import all_orders
@@ -69,7 +69,7 @@ def user_activation(request, uidb64, token):
 @login_required
 def user_edit(request):
     if request.method == 'POST':
-        user_form = UserEditForm(instace=request.user, data=request.POST)
+        user_form = UserEditForm(instance=request.user, data=request.POST)
         if user_form.is_valid():
             user_form.save()
     else:
