@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block title %}Edit Addresses{% endblock %}
+
+{% block content %}
+    <!-- Page Title -->
+    <div class="page-title dark-background main-nav-bg">
+      <div class="container position-relative">
+        {% if product %}
+          <h1>{{ product.title }}</h1>
+        {% else %}
+            <h1>Edit Addresses</h1>
+        {% endif %}
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Account</a></li>
+            <li class="current">Edit Addresses</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+    <div class="col-6 mx-auto">
+      <h1 class="h3 mt-5">Create/Edit Address</h1>
+      <div class="mb-3">Add a new delivery <b>address</b> and delivery preferences</div>
+      <form name="address_form " class="account-form d-flex flex-column" method="post" enctype="multipart/form-data">
+        {% if form.errors %}
+          <div class="alert alert-primary" role="alert">
+            Error: Please try again!
+          </div>
+        {% endif %}
+        {% csrf_token %}
+        <label class="small fw-bold my-2">{{ form.full_name.label}}</label>
+          {{ form.full_name }}
+        <label class="small fw-bold my-2">{{ form.phone_number.label}}</label>
+          {{ form.phone_number }}
+        <label class="small fw-bold my-2">{{ form.address_line_1.label}}</label>
+          {{ form.address_line_1 }}
+        <label class="small fw-bold my-2">{{ form.address_line_2.label}}</label>
+          {{ form.address_line_2 }}
+        <label class="small fw-bold my-2">{{ form.city.label}}</label>
+          {{ form.city }}
+        <label class="small fw-bold my-2">{{ form.postcode.label}}</label>
+          {{ form.postcode }}
+        <button class="py-2 mb-4 my-5 fw-bold w-100 main-btn--submit"
+                type="button" value="Submit" onclick="submitForm()">
+        Add Address
+        </button>
+      </form>
+    </div>
+    <script>
+        function submitForm() {
+           var form = document.getElementsByName('address_form')[0];
+           form.submit();
+           form.reset();
+           return false;
+    }
+    </script>
+{% endblock %}
