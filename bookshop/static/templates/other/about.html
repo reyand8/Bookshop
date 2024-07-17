@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}About Us{% endblock %}
+
+{% block content %}
+
+  <main class="main">
+    <!-- Page Title -->
+    <div class="page-title dark-background  main-nav-bg">
+      <div class="container position-relative">
+        <h1>About Us</h1>
+        <nav class="breadcrumbs">
+          <ol>
+            <li><a href="index.html">Home</a></li>
+            <li class="current">About Us</li>
+          </ol>
+        </nav>
+      </div>
+    </div><!-- End Page Title -->
+    <!-- About Section -->
+    <section id="about" class="about section">
+      <div class="container">
+        <div class="row position-relative">
+          <div class="col-lg-7 about-img" data-aos="zoom-out" data-aos-delay="200"><img src="{% static 'assets/img/about.png' %}"></div>
+          <div class="col-lg-7" data-aos="fade-up" data-aos-delay="100">
+            <h2 class="inner-title">The Best Bookshop</h2>
+            <div class="our-story">
+              <h4>Est 1988</h4>
+              <h3>Our Shop</h3>
+              <p>Welcome to Bookshop, a haven for book lovers since 1988. Our mission is to foster a love for reading
+                and provide a wide selection of books for all ages and interests.
+              </p>
+              <ul>
+                <li><i class="bi bi-check-circle"></i> <span>We offer a curated collection of bestsellers and classic literature.</span></li>
+                <li><i class="bi bi-check-circle"></i> <span>Our knowledgeable staff is always ready to recommend your next great read.</span></li>
+                <li><i class="bi bi-check-circle"></i> <span>We host regular events and book signings to engage our community.</span></li>
+              </ul>
+              <p>Visit us to explore the world of books and discover your next favorite story.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section><!-- /About Section -->
+    <!-- Stats Counter Section -->
+    <section id="stats-counter" class="stats-counter section">
+      <!-- Section Title -->
+      <div class="container section-title" data-aos="fade-up">
+        <h2>Stats</h2>
+      </div><!-- End Section Title -->
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+        <div class="row gy-4">
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-emoji-smile color-blue flex-shrink-0"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="849" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Happy Clients</p>
+              </div>
+            </div>
+          </div><!-- End Stats Item -->
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-journal-richtext color-orange flex-shrink-0"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="521" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Regular Сustomers</p>
+              </div>
+            </div>
+          </div><!-- End Stats Item -->
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-headset color-green flex-shrink-0"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="1463" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Online Shopping</p>
+              </div>
+            </div>
+          </div><!-- End Stats Item -->
+          <div class="col-lg-3 col-md-6">
+            <div class="stats-item d-flex align-items-center w-100 h-100">
+              <i class="bi bi-people color-pink flex-shrink-0"></i>
+              <div>
+                <span data-purecounter-start="0" data-purecounter-end="15" data-purecounter-duration="1" class="purecounter"></span>
+                <p>Hard Workers</p>
+              </div>
+            </div>
+          </div><!-- End Stats Item -->
+        </div>
+      </div>
+    </section><!-- /Stats Counter Section -->
+  </main>
+{% endblock %}
