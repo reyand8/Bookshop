@@ -14,7 +14,7 @@
         </nav>
       </div>
     </div><!-- End Page Title -->
-    <div class="col-12 mx-auto">
+    <div class="col-8 my-5 mx-5">
       <h1 class="h3">My Wishlist</h1>
       <hr />
       {% if wishlist %}
@@ -22,25 +22,37 @@
           <div class="card mb-3 rounded-0">
             <div class="row g-0">
               <div class="col-md-2">
-                {% for image in product.product_image.all  %}
-                  {% if image.is_feature %}
-                    <img class="img-fluid d-block p-2" width="135px" src="{{ image.image.url }}" alt="{{ image.image.alt_text }}"/>
-                  {% endif %}
+                {% for image in product.product_image.all %}
+                      <img class="img-fluid" alt="" src="{{ image.image.url }}">
                 {% endfor %}
               </div>
-              <div class="col-md-10">
+              <div class="col-md-6">
                 <div class="card-body">
-                  <h5 class="card-title">{{product.title}}</h5>
+                  {% if product.title|length > 20 %}
+                      <h5 class="card-title">{{ product.title|slice:":20" }}...</h5>
+                    {% else %}
+                      <h5 class="card-title">{{ product.title }}</h5>
+                  {% endif %}
+
+                   {% if product.description|length > 20 %}
+                      <h5 class="card-text">{{ product.description|slice:":20" }}...</h5>
+                    {% else %}
+                      <h5 class="card-text">{{ product.description }}</h5>
+                  {% endif %}
                   <p class="card-text">{{product.description}}</p>
-                  <p class="card-text"><small class="text-muted">{{product.regular_price}}</small></p>
-                  <a type="button" class="btn btn-primary fw500 btn-sm" href="{% url 'account:user_wishlist' product.id %}">Remove from Wishlist</a>
+                  <p class="card-text"><small class="text-muted">{{product.regular_price}} USD</small></p>
+                  <div>
+                    <a type="button" class="main-btn" href="{{ product.get_absolute_url }}">More Details</a>
+                    <a type="button" class="main-btn" href="{% url 'account:user_wishlist' product.id %}">Remove from Wishlist</a>
+
+                  </div>
                 </div>
               </div>
             </div>
           </div>
         {% endfor %}
       {% else %}
-        <p class="card-text">No products have been added to your wishlist yet</p>
+        <p class="card-text">Your wishlist is empty</p>
       {% endif %}
     </div>
 {% endblock %}
